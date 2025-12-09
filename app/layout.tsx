@@ -36,7 +36,6 @@ export const metadata: Metadata = {
     "motion graphics",
   ],
   authors: [{ name: "NotMatte" }],
-  generator: "v0.app",
 }
 
 export const viewport: Viewport = {
