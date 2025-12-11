@@ -53,7 +53,7 @@ export function Navigation() {
             NotMatte
           </span>
           <span className="text-xs text-muted-foreground font-mono opacity-0 group-hover:opacity-100 transition-opacity">
-            .dev
+            .design
           </span>
         </a>
 

@@ -425,18 +425,24 @@
 
 /* 3D hover effect for showcase images */
 .showcase-card {
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
   transform-style: preserve-3d;
+  will-change: transform;
+}
+.showcase-card img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 .showcase-card:hover {
   transform: perspective(1000px) rotateY(5deg) rotateX(5deg) translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* Infinite scroll container */
-.scroll-container {
-  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-}
+/* Infinite scroll container - now handled inline for better control */
 
 /* Pagination active state */
 .pagination-active {
@@ -464,4 +470,104 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Floating background images animation */
+@keyframes float-bg-1 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(30px, -20px) rotate(5deg);
+  }
+  66% {
+    transform: translate(-20px, -40px) rotate(-3deg);
+  }
+}
+
+@keyframes float-bg-2 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(-25px, -30px) rotate(-4deg);
+  }
+  66% {
+    transform: translate(35px, -15px) rotate(6deg);
+  }
+}
+
+@keyframes float-bg-3 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(20px, -35px) rotate(3deg);
+  }
+  66% {
+    transform: translate(-30px, -10px) rotate(-5deg);
+  }
+}
+
+@keyframes float-bg-4 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(-35px, -25px) rotate(-6deg);
+  }
+  66% {
+    transform: translate(25px, -45px) rotate(4deg);
+  }
+}
+
+.animate-float-bg-1 {
+  animation: float-bg-1 20s ease-in-out infinite;
+}
+
+.animate-float-bg-2 {
+  animation: float-bg-2 25s ease-in-out infinite;
+}
+
+.animate-float-bg-3 {
+  animation: float-bg-3 22s ease-in-out infinite;
+}
+
+.animate-float-bg-4 {
+  animation: float-bg-4 28s ease-in-out infinite;
+}
+
+/* Carousel slide-in animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.6s ease-out both;
+}
+
+/* Infinite scroll animation for dev tools carousel */
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-infinite {
+  animation: scroll-infinite 40s linear infinite;
+}
+
+/* Pause animation on hover */
+.animate-scroll-infinite:hover {
+  animation-play-state: paused;
 }

@@ -7,26 +7,43 @@ import { Button } from "@/components/ui/button"
 import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react"
 
 const showcaseImages = [
-  { src: "/showcase/banner-1.jpg", rotate: -8, size: "lg" },
-  { src: "/showcase/logo-1.jpg", rotate: 5, size: "md" },
-  { src: "/showcase/trailer-1.jpg", rotate: -3, size: "lg" },
-  { src: "/showcase/minecraft-1.jpg", rotate: 12, size: "md" },
-  { src: "/showcase/social-1.jpg", rotate: -6, size: "sm" },
-  { src: "/showcase/banner-2.jpg", rotate: 8, size: "md" },
-  { src: "/showcase/logo-2.jpg", rotate: -10, size: "lg" },
-  { src: "/showcase/web-1.jpg", rotate: 4, size: "md" },
+  { src: "/portfolio/banner/coralmc/banner-halloween.jpg", rotate: -8, size: "lg" },
+  { src: "/portfolio/logo/akaimc.jpg", rotate: 5, size: "md" },
+  { src: "/portfolio/banner/coralmc/coralcup.jpg", rotate: -3, size: "lg" },
+  { src: "/portfolio/banner/coralmc/communityevent.jpg", rotate: 12, size: "md" },
+  { src: "/portfolio/banner/coralmc/skyprison-color.jpg", rotate: 0, size: "lg" },
+  { src: "/portfolio/banner/coralmc/dragonupdate.jpg", rotate: 8, size: "md" },
+  { src: "/portfolio/logo/akaimc.jpg", rotate: -10, size: "lg" },
+  { src: "/portfolio/banner/coralmc/CoralMC-GW-2025-alternative-fixed.png", rotate: 9, size: "md" },
+  { src: "/portfolio/banner/founderhunt.jpg", rotate: 4, size: "md" },
+  { src: "/portfolio/logo/jackpot.jpg", rotate: -5, size: "sm" },
+  { src: "/portfolio/logo/empiremc.png", rotate: 7, size: "md" },
+  { src: "/portfolio/banner/dynastymc.png", rotate: -12, size: "lg" },
 ]
 
 export function HeroSection() {
   const [scrollY, setScrollY] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [isLoaded, setIsLoaded] = useState(false)
+  const [sectionProgress, setSectionProgress] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setIsLoaded(true)
-    const handleScroll = () => setScrollY(window.scrollY)
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrollY(currentScrollY)
+
+      // Calculate section progress (0 = top, 1 = bottom of viewport)
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect()
+        const viewportHeight = window.innerHeight
+        const progress = Math.max(0, Math.min(1, 1 - (rect.bottom / (viewportHeight + rect.height))))
+        setSectionProgress(progress)
+      }
+    }
     window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll() // Initial calculation
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -47,13 +64,13 @@ export function HeroSection() {
   const getSizeClasses = (size: string) => {
     switch (size) {
       case "lg":
-        return "w-48 h-32 md:w-64 md:h-44"
+        return "w-56 h-40 md:w-72 md:h-52"
       case "md":
-        return "w-36 h-24 md:w-48 md:h-32"
+        return "w-44 h-32 md:w-56 md:h-40"
       case "sm":
-        return "w-28 h-20 md:w-36 md:h-24"
+        return "w-36 h-28 md:w-44 md:h-32"
       default:
-        return "w-40 h-28"
+        return "w-48 h-36"
     }
   }
 
@@ -62,23 +79,34 @@ export function HeroSection() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Top row - moving left */}
         <div
-          className="absolute top-[8%] left-0 right-0 scroll-container"
-          style={{ transform: `translateY(${scrollY * 0.1}px)` }}
+          className="absolute top-[10%] left-0 right-0 transition-opacity duration-700"
+          style={{
+            transform: `translateY(${scrollY * 0.3}px)`,
+            opacity: 1 - sectionProgress * 1.2,
+            maskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+          }}
         >
           <div className="flex gap-6 animate-marquee-left" style={{ width: "200%" }}>
             {[...showcaseImages, ...showcaseImages].map((img, i) => (
               <div
                 key={i}
-                className={`${getSizeClasses(img.size)} rounded-2xl overflow-hidden opacity-20 hover:opacity-40 transition-opacity duration-500 flex-shrink-0 showcase-card`}
+                className={`${getSizeClasses(img.size)} rounded-2xl overflow-hidden opacity-60 hover:opacity-90 transition-all duration-500 flex-shrink-0 showcase-card`}
                 style={
                   {
                     "--rotate": `${img.rotate}deg`,
-                    transform: `rotate(${img.rotate}deg)`,
+                    transform: `rotate(${img.rotate + sectionProgress * 15}deg) scale(${1 - sectionProgress * 0.2})`,
                     animationDelay: `${i * 0.5}s`,
                   } as React.CSSProperties
                 }
               >
-                <img src={img.src || "/placeholder.svg"} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={img.src || "/placeholder.svg"}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  style={{ imageRendering: "crisp-edges" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/15 to-transparent pointer-events-none" />
               </div>
             ))}
           </div>
@@ -86,90 +114,132 @@ export function HeroSection() {
 
         {/* Bottom row - moving right */}
         <div
-          className="absolute bottom-[12%] left-0 right-0 scroll-container"
-          style={{ transform: `translateY(${-scrollY * 0.08}px)` }}
+          className="absolute bottom-[15%] left-0 right-0 transition-opacity duration-700"
+          style={{
+            transform: `translateY(${-scrollY * 0.2}px)`,
+            opacity: 1 - sectionProgress * 1.1,
+            maskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+          }}
         >
           <div className="flex gap-6 animate-marquee-right" style={{ width: "200%" }}>
-            {[...showcaseImages.reverse(), ...showcaseImages].map((img, i) => (
+            {[...showcaseImages].reverse().concat([...showcaseImages].reverse()).map((img, i) => (
               <div
                 key={i}
-                className={`${getSizeClasses(img.size)} rounded-2xl overflow-hidden opacity-15 hover:opacity-35 transition-opacity duration-500 flex-shrink-0`}
+                className={`${getSizeClasses(img.size)} rounded-2xl overflow-hidden opacity-55 hover:opacity-85 transition-all duration-500 flex-shrink-0 showcase-card`}
                 style={{
-                  transform: `rotate(${-img.rotate}deg)`,
+                  transform: `rotate(${-img.rotate - sectionProgress * 12}deg) scale(${1 - sectionProgress * 0.15})`,
                   animationDelay: `${i * 0.3}s`,
                 }}
               >
-                <img src={img.src || "/placeholder.svg"} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={img.src || "/placeholder.svg"}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  style={{ imageRendering: "crisp-edges" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/15 to-transparent pointer-events-none" />
               </div>
             ))}
           </div>
         </div>
 
-        {/* Floating accent images - corners */}
+        {/* Floating accent images - sides only, no overlap with carousels */}
         <div
-          className="absolute top-[20%] left-[5%] w-32 h-24 md:w-48 md:h-36 rounded-2xl overflow-hidden opacity-25 animate-float-showcase hidden lg:block"
+          className="absolute top-[35%] left-[3%] w-40 h-32 md:w-52 md:h-40 rounded-2xl overflow-hidden animate-float-showcase hidden xl:block showcase-card transition-all duration-700"
           style={
             {
               "--rotate": "-12deg",
-              transform: `translateY(${scrollY * 0.2}px) rotate(-12deg) translateX(${mousePos.x * 30}px)`,
+              transform: `translateY(${scrollY * 0.5 - sectionProgress * 100}px) rotate(${-12 + sectionProgress * 20}deg) translateX(${mousePos.x * 30}px) scale(${1 - sectionProgress * 0.3})`,
+              opacity: 0.65 - sectionProgress * 0.8,
             } as React.CSSProperties
           }
         >
-          <img src="/showcase/featured-1.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+          <img
+            src="/portfolio/logo/CoralMC Halloween (Render).jpg"
+            alt=""
+            className="w-full h-full object-cover"
+            style={{ imageRendering: "crisp-edges" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
         </div>
 
         <div
-          className="absolute top-[25%] right-[8%] w-36 h-28 md:w-52 md:h-40 rounded-2xl overflow-hidden opacity-20 animate-float-showcase hidden lg:block"
+          className="absolute top-[32%] right-[3%] w-44 h-36 md:w-56 md:h-44 rounded-2xl overflow-hidden animate-float-showcase hidden xl:block showcase-card transition-all duration-700"
           style={
             {
               "--rotate": "8deg",
-              transform: `translateY(${scrollY * 0.15}px) rotate(8deg) translateX(${mousePos.x * -25}px)`,
+              transform: `translateY(${scrollY * 0.4 - sectionProgress * 120}px) rotate(${8 - sectionProgress * 25}deg) translateX(${mousePos.x * -25}px) scale(${1 - sectionProgress * 0.35})`,
+              opacity: 0.6 - sectionProgress * 0.75,
               animationDelay: "1s",
             } as React.CSSProperties
           }
         >
-          <img src="/showcase/featured-2.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+          <img
+            src="/portfolio/banner/Banner-AkaiMC-OPEN-BETA-KITPVP.png"
+            alt=""
+            className="w-full h-full object-cover"
+            style={{ imageRendering: "crisp-edges" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
         </div>
 
         <div
-          className="absolute bottom-[30%] left-[10%] w-28 h-20 md:w-40 md:h-28 rounded-2xl overflow-hidden opacity-20 animate-float-showcase hidden lg:block"
+          className="absolute bottom-[32%] left-[4%] w-36 h-28 md:w-48 md:h-36 rounded-2xl overflow-hidden animate-float-showcase hidden xl:block showcase-card transition-all duration-700"
           style={
             {
               "--rotate": "15deg",
-              transform: `translateY(${-scrollY * 0.12}px) rotate(15deg) translateX(${mousePos.x * 20}px)`,
+              transform: `translateY(${-scrollY * 0.35 + sectionProgress * 80}px) rotate(${15 + sectionProgress * 18}deg) translateX(${mousePos.x * 20}px) scale(${1 - sectionProgress * 0.25})`,
+              opacity: 0.6 - sectionProgress * 0.75,
               animationDelay: "2s",
             } as React.CSSProperties
           }
         >
-          <img src="/showcase/featured-3.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+          <img
+            src="/portfolio/banner/coralmc/bedwars-duels.jpg"
+            alt=""
+            className="w-full h-full object-cover"
+            style={{ imageRendering: "crisp-edges" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
         </div>
 
         <div
-          className="absolute bottom-[35%] right-[6%] w-32 h-24 md:w-44 md:h-32 rounded-2xl overflow-hidden opacity-15 animate-float-showcase hidden lg:block"
+          className="absolute bottom-[30%] right-[4%] w-40 h-32 md:w-48 md:h-36 rounded-2xl overflow-hidden animate-float-showcase hidden xl:block showcase-card transition-all duration-700"
           style={
             {
               "--rotate": "-6deg",
-              transform: `translateY(${-scrollY * 0.18}px) rotate(-6deg) translateX(${mousePos.x * -30}px)`,
+              transform: `translateY(${-scrollY * 0.45 + sectionProgress * 90}px) rotate(${-6 - sectionProgress * 22}deg) translateX(${mousePos.x * -30}px) scale(${1 - sectionProgress * 0.28})`,
+              opacity: 0.55 - sectionProgress * 0.7,
               animationDelay: "0.5s",
             } as React.CSSProperties
           }
         >
-          <img src="/showcase/featured-4.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+          <img
+            src="/portfolio/logo/saturnscp.png"
+            alt=""
+            className="w-full h-full object-cover"
+            style={{ imageRendering: "crisp-edges" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
         </div>
 
         {/* Gradient overlays for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background transition-opacity duration-700"
+          style={{ opacity: 0.9 + sectionProgress * 0.3 }}
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50 transition-opacity duration-700"
+          style={{ opacity: 0.8 + sectionProgress * 0.5 }}
+        />
 
         {/* Center vignette */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 transition-opacity duration-700"
           style={{
-            background: "radial-gradient(ellipse at center, transparent 20%, oklch(0.08 0.005 260) 70%)",
+            background: "radial-gradient(ellipse at center, transparent 35%, oklch(0.08 0.005 260 / 0.6) 80%)",
+            opacity: 0.9 + sectionProgress * 0.4,
           }}
         />
 
@@ -192,16 +262,15 @@ export function HeroSection() {
           <div
             className={`inline-flex items-center gap-2 glass rounded-full px-5 py-2.5 mb-8 transition-all duration-700 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
-            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+            <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm text-foreground font-medium">Disponibile per nuovi progetti</span>
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
           </div>
 
           <h1
             className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 transition-all duration-700 delay-100 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
             style={{ fontFamily: "var(--font-display)" }}
           >
-            <span className="text-foreground">Ciao, sono </span>
+            <span className="text-foreground">Ciao! Mi chiamo Matteo, in arte </span>
             <span className="text-gradient relative">
               NotMatte
               <span className="absolute -inset-1 blur-2xl bg-primary/20 -z-10 rounded-full" />
@@ -209,37 +278,16 @@ export function HeroSection() {
           </h1>
 
           <p
-            className={`text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed transition-all duration-700 delay-200 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+            className={`text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed transition-all duration-700 delay-200 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            Designer e developer creativo che trasforma
-            <span className="text-foreground font-medium"> idee in esperienze visive</span>
+            Sono un Designer e developer che trasforma brand, creator e server Minecraft/FiveM in esperienze visive uniche, curate nei dettagli e pensate per lasciare il segno.
           </p>
-
-          <div
-            className={`flex flex-wrap justify-center gap-3 mb-12 transition-all duration-700 delay-300 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            {[
-              { label: "Graphic Design", icon: "🎨" },
-              { label: "Video Editing", icon: "🎬" },
-              { label: "Minecraft Design", icon: "⛏️" },
-              { label: "Web Development", icon: "💻" },
-            ].map((skill, i) => (
-              <span
-                key={skill.label}
-                className="px-4 py-2 text-sm text-foreground/80 glass-subtle rounded-full flex items-center gap-2 hover:glass transition-all duration-300 hover:scale-105 cursor-default"
-                style={{ animationDelay: `${0.4 + i * 0.1}s` }}
-              >
-                <span>{skill.icon}</span>
-                {skill.label}
-              </span>
-            ))}
-          </div>
 
           <div
             className={`flex items-center justify-center gap-8 mb-12 transition-all duration-700 delay-400 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-gradient">3+</div>
+              <div className="text-3xl font-bold text-gradient">4+</div>
               <div className="text-xs text-muted-foreground uppercase tracking-wider">Anni Esperienza</div>
             </div>
             <div className="w-px h-10 bg-border" />
@@ -252,10 +300,15 @@ export function HeroSection() {
               <div className="text-3xl font-bold text-gradient">50+</div>
               <div className="text-xs text-muted-foreground uppercase tracking-wider">Clienti</div>
             </div>
+            <div className="w-px h-10 bg-border" />
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gradient">4.9/5 ★</div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wider">Valutazione</div>
+            </div>
           </div>
 
           {/* CTA Buttons */}
-          <div
+          {/* <div
             className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-700 delay-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
             <Button
@@ -276,7 +329,7 @@ export function HeroSection() {
             >
               <a href="#portfolio">Esplora il portfolio</a>
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
 
