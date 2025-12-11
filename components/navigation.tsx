@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 
 const navItems = [
   { label: "Chi Sono", href: "#about" },
-  { label: "Portfolio", href: "#portfolio" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "Business", href: "#business" },
   { label: "FAQ", href: "#faq" },
   { label: "Recensioni", href: "#testimonials" },
@@ -45,16 +45,8 @@ export function Navigation() {
     >
       <div className="container mx-auto px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="group flex items-center gap-2">
-          <span
-            className="text-xl font-semibold tracking-tight text-foreground"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            NotMatte
-          </span>
-          <span className="text-xs text-muted-foreground font-mono opacity-0 group-hover:opacity-100 transition-opacity">
-            .design
-          </span>
+        <a href="#" className="group flex items-center">
+          <img src="/logo_completo_white.png" alt="NotMatte Logo" className="h-10 transition-opacity group-hover:opacity-80" />
         </a>
 
         {/* Desktop Navigation */}

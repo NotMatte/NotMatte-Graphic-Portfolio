@@ -1,7 +1,7 @@
 import { Navigation } from "@/components/navigation"
 import { HeroSection } from "@/components/sections/hero-section"
 import { AboutSection } from "@/components/sections/about-section"
-import { PortfolioSection } from "@/components/sections/portfolio-section"
+import { ShowcaseSliderSection } from "@/components/sections/showcase-slider-section"
 import { ClientsSection } from "@/components/sections/clients-section"
 import { BusinessSection } from "@/components/sections/business-section"
 import { FAQSection } from "@/components/sections/faq-section"
@@ -16,7 +16,7 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <AboutSection />
-      <PortfolioSection />
+      <ShowcaseSliderSection />
       <ClientsSection />
       <BusinessSection />
       <FAQSection />

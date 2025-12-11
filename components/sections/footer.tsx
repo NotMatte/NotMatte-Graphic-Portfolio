@@ -1,8 +1,15 @@
 "use client"
 
 import { Instagram, Youtube, MessageCircle, Send } from "lucide-react"
+import React from "react"
 
-const socialLinks = [
+type SocialLink = {
+  icon: React.ComponentType<{ className?: string }>
+  href: string
+  label: string
+}
+
+const socialLinks: SocialLink[] = [
   {
     icon: () => (
       <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
@@ -85,7 +92,8 @@ export function Footer() {
           <div className="lg:col-span-4 space-y-8">
             {/* Logo */}
             <div>
-              <span className="text-3xl font-bold text-gradient">NotMatte</span>
+              {/* <span className="text-3xl font-bold text-gradient">NotMatte</span> */}
+              <img src="/logo_completo_white.png" alt="NotMatte Logo" className="h-15" />
               <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-xs">
                 Creo esperienze visive uniche per il mondo gaming e digitale. Design che lascia il segno.
               </p>
@@ -102,7 +110,7 @@ export function Footer() {
                     className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                     aria-label={social.label}
                   >
-                    {typeof social.icon === "function" ? <social.icon /> : <social.icon className="w-5 h-5" />}
+                    <social.icon className="w-5 h-5" />
                   </a>
                 ))}
               </div>

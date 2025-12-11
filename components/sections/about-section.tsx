@@ -207,6 +207,9 @@ export function AboutSection() {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16">
+          <span className="text-primary text-sm font-medium uppercase tracking-wider mb-4 block">
+            Chi sono e cosa faccio
+          </span>
           <h2 className="text-7xl md:text-7xl font-bold mb-6">
             Si va bene, ma chi è realmente <span className="text-gradient">NotMatte</span>?
           </h2>

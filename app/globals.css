@@ -571,3 +571,93 @@
 .animate-scroll-infinite:hover {
   animation-play-state: paused;
 }
+
+/* ========================================
+   SHOWCASE SLIDER ANIMATIONS
+   ======================================== */
+
+/* Animazione lenta per righe sinistra (45 secondi) */
+@keyframes marquee-slow-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+/* Animazione lenta per righe destra (45 secondi) */
+@keyframes marquee-slow-right {
+  0% {
+    transform: translateX(-33.333%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Classi di animazione */
+.animate-marquee-slow-left {
+  animation: marquee-slow-left 45s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-slow-right {
+  animation: marquee-slow-right 45s linear infinite;
+  will-change: transform;
+}
+
+/* Pause on hover per interattività */
+.animate-marquee-slow-left:hover,
+.animate-marquee-slow-right:hover {
+  animation-play-state: paused;
+}
+
+/* ========================================
+   SHOWCASE ROW TILT - RESPONSIVE
+   ======================================== */
+
+/* Riga 1 e 3: Inclinazione positiva */
+.showcase-row-tilt-1 {
+  transform: rotate(0deg);
+}
+
+@media (min-width: 768px) {
+  .showcase-row-tilt-1 {
+    transform: rotate(3deg) translateY(-10px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .showcase-row-tilt-1 {
+    transform: rotate(6deg) translateY(-20px);
+  }
+}
+
+/* Riga 2: Inclinazione negativa */
+.showcase-row-tilt-2 {
+  transform: rotate(0deg);
+}
+
+@media (min-width: 768px) {
+  .showcase-row-tilt-2 {
+    transform: rotate(-3deg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .showcase-row-tilt-2 {
+    transform: rotate(-6deg);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY: REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-slow-left,
+  .animate-marquee-slow-right {
+    animation-duration: 120s;
+  }
+}
