@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Star, Quote } from "lucide-react"
+import { Star, Quote, TrendingUp, Award, Clock, Users } from "lucide-react"
 
 const clients = [
   { name: "AkaiMC Network", type: "Minecraft Server", logo: "/customer/akaimc.png" },
@@ -27,28 +27,38 @@ const featuredReviews = [
     content:
       "Direi che il servizio è ottimo, NotMatte disponibile e disposto ad apportare le modifiche richieste, non ho altro da aggiungere!",
     rating: 5,
-    project: "Restylema, Banner, Social, e altro...",
+    project: "Restyle, Banner, Social, e altro...",
     projectImage: "/customer/coralmc.png", // Immagine del server/progetto
   },
   {
-    name: "Luca T.",
-    role: "Content Creator",
-    avatar: "/avatars/luca.jpg",
+    name: "Beta",
+    role: "Owner @ MetaMC",
+    avatar: "/avatars/beta.png",
     content:
-      "I trailer che crea sono di un altro livello. Ogni video genera un hype pazzesco nella community. Consiglio assolutamente per chi cerca qualità premium.",
+      "Lavorare con NotMatte è stato semplicemente eccezionale. Il suo lavoro è stato veloce, preciso e professionale, fornendo un prodotto di qualità che ha superato le nostre aspettative.",
     rating: 5,
-    project: "Trailer Cinematici",
-    projectImage: "/portfolio/trailer/Copertina-video-teaser.jpg", // Esempio thumbnail trailer
+    project: "Banner MC-ITA e Banner vari",
+    projectImage: "/customer/metamc.png", // Immagine del server/progetto
   },
   {
-    name: "Sofia M.",
-    role: "CEO @ GamersHQ",
-    avatar: "/avatars/sofia.jpg",
+    name: "NoLifeGabbo",
+    role: "Content Creator",
+    avatar: "/avatars/nolifegabbo.png",
     content:
-      "Abbiamo commissionato il sito web e il branding completo. Risultato? Professionalità top, tempi rispettati e supporto continuo. Partner affidabile al 100%.",
+      "Ottima qualità e abbastanza tempestivo, non mi lamento di certo del risultato!",
+    rating: 4,
+    project: "Assets e Banner per Twitch e YouTube",
+    projectImage: "/avatars/nolifegabbo.png", // Esempio thumbnail trailer
+  },
+  {
+    name: "Sk Manux",
+    role: "CEO @ Era-Roleplay",
+    avatar: "/avatars/skmanux.png",
+    content:
+      "Lavoro eccezionale. Ogni elemento, dai menu ai loghi, è curato nei minimi dettagli rendendo tutto più chiaro e intuitivo. Molto puntuale e disponibile. Prezzi più che giusti.",
     rating: 5,
-    project: "Brand Identity + Web",
-    projectImage: "/portfolio/logo/empiremc.png", // Esempio logo/branding
+    project: "Brand Identity + Fivem Texturing + Assets Web",
+    projectImage: "/customer/eraroleplay.png", // Esempio logo/branding
   },
 ]
 
@@ -142,92 +152,183 @@ export function ClientsSection() {
           {featuredReviews.map((review, index) => (
             <div
               key={review.name}
-              className={`glass rounded-3xl overflow-hidden relative group hover:glass-sharp transition-all duration-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              className={`glass rounded-3xl p-6 relative group hover:glass-sharp transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
               style={{ transitionDelay: `${300 + index * 100}ms` }}
             >
-              {/* Project Image Header */}
-              <div className="relative h-32 overflow-hidden bg-secondary/30">
-                <img
-                  src={review.projectImage || "/placeholder.svg"}
-                  alt={review.project}
-                  className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none"
-                  }}
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
-
-                {/* Quote icon */}
-                <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-30 transition-opacity">
-                  <Quote className="w-8 h-8 text-white" />
-                </div>
+              {/* Quote icon decorativo in basso a destra */}
+              <div className="absolute bottom-6 right-6 opacity-5 group-hover:opacity-10 transition-all duration-700 ease-out pointer-events-none">
+                <Quote className="w-16 h-16 text-foreground" />
               </div>
 
-              {/* Avatar positioned on the edge - OUTSIDE overflow container */}
-              <div className="absolute top-[104px] left-6 z-10">
-                <div className="w-16 h-16 rounded-full bg-secondary overflow-hidden ring-4 ring-background flex items-center justify-center p-1">
-                  <img
-                    src={review.avatar || "/placeholder.svg"}
-                    alt={review.name}
-                    className="w-full h-full object-contain rounded-full"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none"
-                    }}
-                  />
+              {/* Header con avatar + logo progetto */}
+              <div className="flex items-start gap-5 mb-4">
+                {/* Avatar group: foto profilo + logo progetto sovrapposti */}
+                <div className="relative flex-shrink-0">
+                  {/* Avatar principale */}
+                  <div className="w-12 h-12 rounded-full bg-secondary overflow-hidden ring-2 ring-background flex items-center justify-center">
+                    <img
+                      src={review.avatar || "/placeholder.svg"}
+                      alt={review.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none"
+                      }}
+                    />
+                  </div>
+                  {/* Logo progetto sovrapposto in basso a destra - solo per chi NON è Content Creator */}
+                  {!review.role.includes("Content Creator") && (
+                    <div className="absolute -bottom-1 -right-2 w-7 h-7 rounded-full bg-background overflow-hidden ring-2 ring-background flex items-center justify-center p-0.5">
+                      <img
+                        src={review.projectImage || "/placeholder.svg"}
+                        alt={review.project}
+                        className="w-full h-full object-contain"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none"
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
 
-              {/* Content */}
-              <div className="p-6 pt-10">
-                {/* Author info */}
-                <div className="mb-4">
-                  <div className="font-semibold text-foreground">{review.name}</div>
-                  <div className="text-sm text-muted-foreground">{review.role}</div>
+                {/* Info autore */}
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-foreground truncate">{review.name}</div>
+                  <div className="text-xs text-muted-foreground truncate">{review.role}</div>
                 </div>
 
-                {/* Rating */}
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: review.rating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                {/* Rating spostato in alto a sinistra */}
+                <div className="flex gap-0.5 flex-shrink-0">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-primary text-primary' : 'fill-none text-muted-foreground/30'}`}
+                    />
                   ))}
                 </div>
+              </div>
 
-                {/* Review content */}
-                <p className="text-foreground/90 mb-4 leading-relaxed text-sm">"{review.content}"</p>
+              {/* Contenuto recensione */}
+              <p className="text-foreground/90 mb-4 leading-relaxed text-sm italic">
+                "{review.content}"
+              </p>
 
-                {/* Project tag */}
-                <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                  {review.project}
-                </div>
+              {/* Project tag in basso */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                <span className="w-1 h-1 rounded-full bg-primary"></span>
+                {review.project}
               </div>
 
               {/* Hover gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out pointer-events-none rounded-3xl" />
             </div>
           ))}
         </div>
 
-        {/* Stats bar */}
-        <div
-          className={`mt-16 glass-subtle rounded-2xl p-8 transition-all duration-700 delay-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-gradient mb-2">98%</div>
-              <div className="text-sm text-muted-foreground">Clienti Soddisfatti</div>
+        {/* Stats Section */}
+        <div className="mt-40">
+          {/* Header */}
+          <div className="mb-16">
+            <h2 className="text-4xl md:text-4xl font-bold mb-5 text-center max-w-3xl mx-auto">
+              Noiosi anche i feedback dei clienti? 😤<br />
+              <span className="text-gradient">Lascia che siano i numeri a parlare!</span>
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-xl mx-auto text-center">
+              Dati reali, risultati tangibili e zero chiacchiere: questi numeri raccontano la costanza, la qualità e
+              la passione che metto in ogni progetto. Non opinioni, non promesse: solo prove concrete.
+            </p>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Stat 1 - Clienti Soddisfatti */}
+            <div
+              className={`glass rounded-3xl p-6 relative group hover:glass-sharp transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              style={{ transitionDelay: "600ms" }}
+            >
+              <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-all duration-700 ease-out">
+                <TrendingUp className="w-12 h-12 text-primary" />
+              </div>
+              <div className="relative">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/10 mb-4 group-hover:scale-110 transition-transform duration-700 ease-out">
+                  <TrendingUp className="w-6 h-6 text-primary" />
+                </div>
+                <div className="text-5xl font-bold text-gradient mb-2 group-hover:scale-105 transition-transform duration-700 ease-out">
+                  98%
+                </div>
+                <div className="text-sm font-medium text-muted-foreground">Clienti Soddisfatti</div>
+                <div className="text-xs text-muted-foreground/60 mt-1">Chi torna è soddisfatto</div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out pointer-events-none rounded-3xl" />
             </div>
-            <div>
-              <div className="text-4xl font-bold text-gradient mb-2">4.9</div>
-              <div className="text-sm text-muted-foreground">Rating Medio</div>
+
+            {/* Stat 2 - Rating Medio */}
+            <div
+              className={`glass rounded-3xl p-6 relative group hover:glass-sharp transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              style={{ transitionDelay: "700ms" }}
+            >
+              <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-all duration-700 ease-out">
+                <Award className="w-12 h-12 text-primary" />
+              </div>
+              <div className="relative">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/10 mb-4 group-hover:scale-110 transition-transform duration-700 ease-out">
+                  <Award className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <div className="text-5xl font-bold text-gradient group-hover:scale-105 transition-transform duration-700 ease-out">
+                    4.9
+                  </div>
+                  <div className="text-xl text-muted-foreground">/5</div>
+                </div>
+                <div className="text-sm font-medium text-muted-foreground">Rating Medio</div>
+                <div className="flex gap-0.5 mt-2">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="w-3 h-3 fill-primary text-primary" />
+                  ))}
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out pointer-events-none rounded-3xl" />
             </div>
-            <div>
-              <div className="text-4xl font-bold text-gradient mb-2">72h</div>
-              <div className="text-sm text-muted-foreground">Tempo Risposta</div>
+
+            {/* Stat 3 - Tempo Risposta */}
+            <div
+              className={`glass rounded-3xl p-6 relative group hover:glass-sharp transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              style={{ transitionDelay: "800ms" }}
+            >
+              <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-all duration-700 ease-out">
+                <Clock className="w-12 h-12 text-primary" />
+              </div>
+              <div className="relative">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/10 mb-4 group-hover:scale-110 transition-transform duration-700 ease-out">
+                  <Clock className="w-6 h-6 text-primary" />
+                </div>
+                <div className="text-5xl font-bold text-gradient mb-2 group-hover:scale-105 transition-transform duration-700 ease-out">
+                  72h
+                </div>
+                <div className="text-sm font-medium text-muted-foreground">Tempo Risposta</div>
+                <div className="text-xs text-muted-foreground/60 mt-1">Media consegna progetti</div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out pointer-events-none rounded-3xl" />
             </div>
-            <div>
-              <div className="text-4xl font-bold text-gradient mb-2">85%</div>
-              <div className="text-sm text-muted-foreground">Clienti Ricorrenti</div>
+
+            {/* Stat 4 - Clienti Ricorrenti */}
+            <div
+              className={`glass rounded-3xl p-6 relative group hover:glass-sharp transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              style={{ transitionDelay: "900ms" }}
+            >
+              <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-all duration-700 ease-out">
+                <Users className="w-12 h-12 text-primary" />
+              </div>
+              <div className="relative">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/10 mb-4 group-hover:scale-110 transition-transform duration-700 ease-out">
+                  <Users className="w-6 h-6 text-primary" />
+                </div>
+                <div className="text-5xl font-bold text-gradient mb-2 group-hover:scale-105 transition-transform duration-700 ease-out">
+                  85%
+                </div>
+                <div className="text-sm font-medium text-muted-foreground">Clienti Ricorrenti</div>
+                <div className="text-xs text-muted-foreground/60 mt-1">Tornano per nuovi progetti</div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out pointer-events-none rounded-3xl" />
             </div>
           </div>
         </div>
